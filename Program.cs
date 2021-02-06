@@ -1,12 +1,14 @@
-﻿// .net "Imports"
+﻿/*
+ * Copyright (c) 2021 Mrmagicpie
+ *
+ *          PieCode
+ * 
+ */
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using System.Text.RegularExpressions;
 using PieCode.Shell.Commands;
 using PieCode.Shell;
-// Custom "Imports"
 
 namespace PieCode
 {

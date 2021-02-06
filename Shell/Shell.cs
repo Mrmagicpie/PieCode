@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * Copyright (c) 2021 Mrmagicpie
+ *
+ *          PieCode
+ * 
+ */
+using System;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -20,13 +26,9 @@ namespace PieCode.Shell
                 Global.PWD = Directory.GetCurrentDirectory();
 
                 if (Global.PWD.ToLower() == Global.HOME.ToLower())
-                {
-                    Global.PWD = "~";
-                }
+                { Global.PWD = "~"; }
                 else
-                {
-                    Global.PWD = Global.PWD.Replace(Global.HOME, "~");
-                }
+                { Global.PWD = Global.PWD.Replace(Global.HOME, "~"); }
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.Write("{0}@{1} [ {2} ]: $ ", Global.USER, Global.HOSTNAME, Global.PWD);
@@ -34,14 +36,10 @@ namespace PieCode.Shell
                 Global.INPUT = Console.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(Global.INPUT))
-                {
-                    continue;
-                }
+                { continue; }
 
                 if (string.IsNullOrEmpty(Global.INPUT))
-                {
-                    continue;
-                }
+                { continue; }
 
                 if (Global.INPUT.ToLower() == "exit")
                 {
@@ -49,9 +47,7 @@ namespace PieCode.Shell
                     break;
                 }
                 else
-                {
-                    Command();
-                }
+                { Command(); }
             }
         }
         // Yes ik it can be private but if somehow someone wants to use this they can
@@ -60,7 +56,7 @@ namespace PieCode.Shell
         /// Command handler. Deals with all Shell commands.
         /// </summary>
         /// <returns>Calls a function based on the command given.</returns>
-        public static void Command()
+        private static void Command()
         {
             // Bool to stop the command function. I don't really know why its executing the if and else. Probably
             //                            because I'm using a global variable.

@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * Copyright (c) 2021 Mrmagicpie
+ *
+ *          PieCode
+ * 
+ */
+using System;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
