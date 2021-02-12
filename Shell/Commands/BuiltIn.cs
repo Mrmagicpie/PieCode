@@ -5,7 +5,10 @@
  * 
  */
 using System;
+using System.ComponentModel.Design;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -13,9 +16,25 @@ namespace PieCode.Shell.Commands
 {
     public class BuiltIn
     {
+        public static void RM()
+        {
+            if (Global.INPUT.Contains("--help") || Global.INPUT.Contains("-h"))
+            {
+                var help = new StringBuilder()
+                    .Append(" \n \n")
+                    .Append("Remove help! \n")
+                    .Append("Work in progress!")
+                    .Append(" \n \n");
+                Console.WriteLine(help);
+            }
+            if (Global.INPUT[1].Contains("-r") || Global.INPUT[1].Contains("--recursive"))
+            {
+                Global.RAWINPUT = Global.RAWINPUT;
+            }
+        }
         public static void HostnameCTL()
         {
-            if (Global.INPUT.StartsWith("hostnamectl --help"))
+            if (Global.INPUT[1].StartsWith("--help"))
             {
                 var help = new StringBuilder()
                     .Append(" \n")

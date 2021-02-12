@@ -6,6 +6,7 @@
  */
 using System;
 using System.Text;
+using System.Text.Json;
 using System.IO;
 using System.Text.RegularExpressions;
 using PieCode.Shell.Commands;
@@ -14,8 +15,23 @@ namespace PieCode.Shell
 {
     public class Shell
     {
+        private class AliasDict
+        {
+            public DateTimeOffset Date { get; set; }
+        }
         public static void StartShell()
         {
+            // TODO: Make this actually work.
+            // if (Directory.Exists(Global.HOME + "PieCode/"))
+            // {
+            //     if (File.Exists(Global.HOME + "PieCode/aliases.json"))
+            //     {
+            //         string jsonString;
+            //         string weatherForecast;
+            //         jsonString = File.ReadAllText(Global.HOME + "PieCode/aliases.json");
+            //         weatherForecast = JsonSerializer.Deserialize<WeatherForecast>(jsonString);
+            //     }
+            // }
             if (Global.CDHOME)
             {
                 Directory.SetCurrentDirectory(Global.HOME);
@@ -33,15 +49,15 @@ namespace PieCode.Shell
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.Write("{0}@{1} [ {2} ]: $ ", Global.USER, Global.HOSTNAME, Global.PWD);
 
-                Global.INPUT = Console.ReadLine();
+                Global.RAWINPUT = Console.ReadLine();
 
-                if (string.IsNullOrWhiteSpace(Global.INPUT))
+                if (string.IsNullOrWhiteSpace(Global.RAWINPUT))
                 { continue; }
 
-                if (string.IsNullOrEmpty(Global.INPUT))
+                if (string.IsNullOrEmpty(Global.RAWINPUT))
                 { continue; }
 
-                if (Global.INPUT.ToLower() == "exit")
+                if (Global.RAWINPUT.ToLower() == "exit")
                 {
                     Console.WriteLine("\nExiting the shell!\n");
                     break;
@@ -50,7 +66,12 @@ namespace PieCode.Shell
                 { Command(); }
             }
         }
-        // Yes ik it can be private but if somehow someone wants to use this they can
+
+        private static void new_command()
+        {
+            Global.INPUT = Global.INPUT.Split(" ");
+            
+        }
 
         /// <summary>
         /// Command handler. Deals with all Shell commands.

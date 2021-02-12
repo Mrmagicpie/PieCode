@@ -43,10 +43,18 @@ namespace PieCode
         public static bool              CDHOME    = true;
         
         /// <summary>
-        /// Command input.
+        /// Raw command input to be used for collecting the raw input.
         /// </summary>
-        public static string            INPUT;
+        public static string            RAWINPUT;
+        
+        /// <summary>
+        /// Split command input to be used for command handling.
+        /// </summary>
+        public static string[]          INPUT;
 
+        /// <summary>
+        /// List of Shell wide aliases. 
+        /// </summary>
         public static Dictionary<string, string> ALIASES = new Dictionary<string, string>(){
             {"l", "ls"}
         };
