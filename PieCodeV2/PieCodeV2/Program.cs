@@ -1,7 +1,21 @@
 ﻿/*
  *  PieCode Copyright (c) 2021 Mrmagicpie
+ *
+ *
+ *  File to hold the basic program stuff.
+ *
+ *    This file holds two classes. The
+ *  Global class that holds the main Shell
+ *  and interpreter global variables. And
+ *  the PieCode class which holds the Main
+ *  method. The Main method decides if we
+ *  should starts a Shell instance or
+ *  interpreter instance.
+ *
+ *  Namespace: PieCodeV2
  * 
  */
+
 
 using System;
 using System.Collections.Generic;
@@ -74,7 +88,7 @@ namespace PieCodeV2
     /// <summary>
     /// Main PieCode Class.
     /// </summary>
-    class Program
+    class PieCode
     {
         public static async Task Main(string[] args)
         {
