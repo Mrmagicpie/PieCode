@@ -1,5 +1,8 @@
 ﻿/*
  *  PieCode Copyright (c) 2021 Mrmagicpie
+ *
+ *  Main Shell file to hold main Shell.
+ *
  * 
  */
 
