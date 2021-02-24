@@ -21,7 +21,6 @@ using System.IO;
 using System.Security;
 using System.Threading.Tasks;
 using PieCodeV2.Errors;
-using PieCodeV2.Interpreter.Commands;
 
 
 namespace PieCodeV2.Interpreter
@@ -66,12 +65,15 @@ namespace PieCodeV2.Interpreter
                 {
                     if (!lines.StartsWith(";"))
                     {
-                        if (!lines.EndsWith(" ")) {temp_lines = lines + " ";}
-                        else { temp_lines = lines;}
+                        if (!string.IsNullOrWhiteSpace(lines) || !string.IsNullOrWhiteSpace(lines))
+                        {
+                            if (!lines.EndsWith(" ")) {temp_lines = lines + " ";}
+                            else { temp_lines = lines;}
                     
-                        temp_line = temp_lines.Split(" ", 2);
-                        object[] parameters = {temp_line[1]};
-                        typeof(Commands.Commands).GetMethod(temp_line[0]).Invoke(null, parameters);
+                            temp_line = temp_lines.Split(" ", 2);
+                            object[] parameters = {temp_line[1]};
+                            typeof(Commands.Commands).GetMethod(temp_line[0]).Invoke(null, parameters);   
+                        }
                     }
                     line++;
                 }
