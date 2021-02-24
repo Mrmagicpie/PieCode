@@ -1,10 +1,20 @@
 ﻿/*
  *  PieCode Copyright (c) 2021 Mrmagicpie
  *
- *  Main Shell file to hold main Shell.
+ * 
+ *  Main file to hold main Shell.
+ *
+ *    This file holds the main Shell class.
+ *  This class holds the guts of the shell
+ *  along with the command handler. It
+ *  relies on ShellCommands and ShellCommandsDocs
+ *  classes.
  *
  * 
+ *  Namespace: PieCodeV2.Shell
+ * 
  */
+
 
 using System;
 using System.IO;
@@ -12,11 +22,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace PieCodeV2.Shell
 {
     public class Shell
     {
-       /// <summary>
+        /// <summary>
         /// Starts the main shell.
         /// </summary>
         /// <returns>Returns "never" ending shell instance.</returns>
