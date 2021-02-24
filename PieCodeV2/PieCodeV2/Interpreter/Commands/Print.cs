@@ -16,7 +16,12 @@ namespace PieCodeV2.Interpreter.Commands
     public partial class Commands
     {
         public static void print(string content)
-        // TODO: Make this allow \n
-         { Console.Write(content); }
+        {
+            if (content.Contains("\\n"))
+            { content = content.Replace("\\n", Environment.NewLine); }
+            
+            Console.WriteLine(content);
+            
+        }
     }
 }
