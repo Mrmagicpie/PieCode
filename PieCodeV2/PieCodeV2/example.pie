@@ -1,0 +1,10 @@
+﻿#!/usr/bin/env PieCode
+; A shebang may only be used on the first line!
+
+; This is a single line comment.
+; For now, multiline comments don't exist. I don't really know why they
+; exist when you can just use more single line versions, but oh well.
+; In line comments do not exist yet! They will come eventually.
+
+print<this is a print statement, for now, any arguments that come after\n the print is considered a string
+annoying<pie

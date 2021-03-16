@@ -1,13 +1,26 @@
 ﻿/*
  *  PieCode Copyright (c) 2021 Mrmagicpie
+ *
+ * 
+ *  Essential file holding the ShellCommands class. 
+ *
+ *    This file holds the ShellCommands class,
+ *  which is an essential class in the shell.
+ *  This holds the code for the commands that
+ *  are usable at runtime.
+ *
+ *
+ *  Namespace: PieCodeV2.Shell
  * 
  */
+
 
 using System;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
 
 namespace PieCodeV2.Shell
 {
