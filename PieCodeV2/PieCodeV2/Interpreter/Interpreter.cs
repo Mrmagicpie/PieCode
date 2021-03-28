@@ -97,7 +97,7 @@ namespace PieCodeV2.Interpreter
                 // Set things to ignore while running the program.
                 if (
                     string.IsNullOrWhiteSpace(lines)      ||
-                    string.IsNullOrWhiteSpace(lines)      ||
+                    string.IsEmptyOrWhiteSpace(lines)     ||
                     lines.StartsWith(";")                 ||
                     (line == 0 && lines.StartsWith("#!"))
                 )  // Add one to the line int variable(for lines) and then go to the next loop
