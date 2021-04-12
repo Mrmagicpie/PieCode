@@ -84,10 +84,18 @@ namespace PieCodeV2.Interpreter
             // Keep track of the current line in the line variable
             int line = 0;
             
-            // Old split stuff in case
+            // Old split stuff just in case
             // char[] split   = { ' ', '<', '>' };
             // char[] split   = {' '};
             // string last_func;
+
+            // Line number + char number
+            Dictionary<string, string> STRINGS = new Dictionary<string, string>() 
+            { {"0-100", "ded"} };
+            Dictionary<string, bool>   CONTEXT = new Dictionary<string, bool>()
+            { {"string", false}, {"func", false} };
+            
+            string LAST_STRING = "";
 
             // Loop over each line in the contents list
             foreach (var lines in interpreterFile.contents)
@@ -102,77 +110,104 @@ namespace PieCodeV2.Interpreter
                     (line == 0 && lines.StartsWith("#!"))
                 )  // Add one to the line int variable(for lines) and then go to the next loop
                 { line++; continue; }
-                
-                try
+
+                var char_num = 0;
+                foreach (var character in lines)
                 {
-                    string temp_lines;
+                    var letter = character.ToString();
+                    if (string.IsNullOrEmpty(letter) || string.IsNullOrWhiteSpace(letter)) { continue; }
 
-                    // Check if the line doesn't end with a space(for now this is necessary for the interpreter not to error)
-                    if (!lines.EndsWith(" "))
-                    { temp_lines = lines + " "; }
-                    else
-                    { temp_lines = lines; }
-
-                    string[] temp_line;
-
-                    // Split at the first call symbol, this will need to be redone for more advanced situations in the future
-                    temp_line = temp_lines.Split("<", 2);
-                    // temp_line                 =  temp_lines.Split(split, 2);
-                    // object[] parameters       =  { temp_line[1] };
-
-                    // I forgot why I did this but leaving it commented in case.
-                    // int param_count = command.GetParameters().Length;
-                    // foreach (var par in command_par)
-                    // {
-                    //     if (par.IsOptional)
-                    //     {
-                    //         param_count--;
-                    //     }
-                    // }
-
-                    // TODO: Make this actually be able to process not only the first thing
-                    
-                    // Find the first method in the line
-                    MethodInfo command       =  typeof(Commands.Commands).GetMethod(temp_line[0]);
-                    // Create a new list for the parameters later
-                    List<object> parameters  =  new List<object>();
-                    int para_int             =  0;
-
-                    // Loop over all the methods parameters, then if they're not optional add them to the parameters list
-                    foreach (var parameter in command.GetParameters())
+                    if (letter == "\"")
                     {
-                        try
+                        string str_line   = line + "-" + char_num;
+                        CONTEXT["string"] = !CONTEXT["string"];
+                        if (!CONTEXT["string"])
                         {
-                            if (!parameter.IsOptional)
-                            {
-                                parameters.Add(temp_line[para_int + 1]);
-                                para_int++;
-                            }
+                            STRINGS[str_line] = "";
+                            LAST_STRING       = str_line;
                         }
-                        catch (IndexOutOfRangeException)
-                        {
-                            Console.WriteLine("Syntax error:\n Mismatch arguments!");
-                            return;
-                            // throw new Exception();
-                        }
+                        else
+                        { LAST_STRING = ""; }
+                    }
+                    else if (CONTEXT["string"])
+                    {
+                        STRINGS[LAST_STRING] += letter; 
                     }
 
-                    // Change the parameter list to an array, then use that array to invoke the methods
-                    object[] new_para = parameters.ToArray();
-                    command.Invoke(null, new_para);
-
-                    // Tell the interpreter we're on a new line
-                    line++;
+                    char_num++;
                 }
-
-                // Catch nullreference in case there isn't a function by that name
-                catch (NullReferenceException)
-                {
-                    Console.WriteLine("\nSyntax error at line {0}: function not found", line + 1);
-                    Console.WriteLine(lines);
-                    Console.WriteLine("^\n");
-                    break;
-                }
+                
+                // TODO: Recode this to process after the line has been processed char-by-char 
+                // try
+                // {
+                //     string temp_lines;
+                //
+                //     // Check if the line doesn't end with a space(for now this is necessary for the interpreter not to error)
+                //     if (!lines.EndsWith(" "))
+                //     { temp_lines = lines + " "; }
+                //     else
+                //     { temp_lines = lines; }
+                //
+                //     string[] temp_line;
+                //
+                //     // Split at the first call symbol, this will need to be redone for more advanced situations in the future
+                //     temp_line = temp_lines.Split("<", 2);
+                //     // temp_line                 =  temp_lines.Split(split, 2);
+                //     // object[] parameters       =  { temp_line[1] };
+                //
+                //     // I forgot why I did this but leaving it commented in case.
+                //     // int param_count = command.GetParameters().Length;
+                //     // foreach (var par in command_par)
+                //     // {
+                //     //     if (par.IsOptional)
+                //     //     {
+                //     //         param_count--;
+                //     //     }
+                //     // }
+                //
+                //     // TODO: Make this actually be able to process not only the first thing
+                //     
+                //     // Find the first method in the line
+                //     MethodInfo command       =  typeof(Commands.Commands).GetMethod(temp_line[0]);
+                //     // Create a new list for the parameters later
+                //     List<object> parameters  =  new List<object>();
+                //     int para_int             =  0;
+                //
+                //     // Loop over all the methods parameters, then if they're not optional add them to the parameters list
+                //     foreach (var parameter in command.GetParameters())
+                //     {
+                //         try
+                //         {
+                //             if (!parameter.IsOptional)
+                //             {
+                //                 parameters.Add(temp_line[para_int + 1]);
+                //                 para_int++;
+                //             }
+                //         }
+                //         catch (IndexOutOfRangeException)
+                //         {
+                //             Console.WriteLine("Syntax error:\n Mismatch arguments!");
+                //             return;
+                //             // throw new Exception();
+                //         }
+                //     }
+                //
+                //     // Change the parameter list to an array, then use that array to invoke the methods
+                //     object[] new_para = parameters.ToArray();
+                //     command.Invoke(null, new_para);
+                //
+                //     // Tell the interpreter we're on a new line
+                //     line++;
+                // }
+                //
+                // // Catch nullreference in case there isn't a function by that name
+                // catch (NullReferenceException)
+                // {
+                //     Console.WriteLine("\nSyntax error at line {0}: function not found", line + 1);
+                //     Console.WriteLine(lines);
+                //     Console.WriteLine("^\n");
+                //     break;
+                // }
             }
         }
     }
