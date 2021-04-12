@@ -115,12 +115,19 @@ namespace PieCodeV2.Interpreter
                 foreach (var character in lines)
                 {
                     var letter = character.ToString();
-                    if (string.IsNullOrEmpty(letter) || string.IsNullOrWhiteSpace(letter)) { continue; }
+                    // if (string.IsNullOrEmpty(letter) || string.IsNullOrWhiteSpace(letter))
+                    // {
+                    //     if (CONTEXT["string"]) { STRINGS[LAST_STRING] += letter; }
+                    // }
 
                     if (letter == "\"")
                     {
+                        // TODO: Add support for \" and '
                         string str_line   = line + "-" + char_num;
-                        CONTEXT["string"] = !CONTEXT["string"];
+                        
+                        // If we aren't in a string, create a new PieCode string in the dictionary,
+                        // and set the last string var to the proper var. If we are, then unset the 
+                        // last string var.
                         if (!CONTEXT["string"])
                         {
                             STRINGS[str_line] = "";
@@ -128,10 +135,24 @@ namespace PieCodeV2.Interpreter
                         }
                         else
                         { LAST_STRING = ""; }
+                        
+                        // And then flip the string var to tell the interpreter if we're in a 
+                        // string or not. 
+                        CONTEXT["string"] = !CONTEXT["string"];
                     }
                     else if (CONTEXT["string"])
                     {
                         STRINGS[LAST_STRING] += letter; 
+                    }
+                    // Pass if it's blank
+                    else if (string.IsNullOrWhiteSpace(letter) || string.IsNullOrEmpty(letter)) { }
+                    
+                    // TODO: Add the letter to a current operation var and then when we get to a blank space attempt to process that current operation. 
+                    // or when we get to a < start function calling until we get to a >
+                    else
+                    {
+                        Console.WriteLine("You are trying to do more than a string initialization!" + 
+                                          "Yell at Pie to finish this!");
                     }
 
                     char_num++;
