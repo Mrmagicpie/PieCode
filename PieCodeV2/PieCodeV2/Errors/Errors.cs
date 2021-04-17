@@ -5,12 +5,15 @@ namespace PieCodeV2.Errors
     public class Errors
     {}
     
-    public class IsThiccException : Exception
+    public class PieCodeException : Exception
     {}
     
-    public class FileNotFound : IsThiccException
+    public class FileNotFound : PieCodeException
     {}
     
-    public class FileNotValid : IsThiccException
+    public class FileNotValid : PieCodeException
+    {}
+    
+    public class SyntaxError : PieCodeException
     {}
 }

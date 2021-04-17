@@ -90,12 +90,16 @@ namespace PieCodeV2.Interpreter
             // string last_func;
 
             // Line number + char number
-            Dictionary<string, string> STRINGS = new Dictionary<string, string>() 
-            { {"0-100", "ded"} };
-            Dictionary<string, bool>   CONTEXT = new Dictionary<string, bool>()
-            { {"string", false}, {"func", false} };
+            Dictionary<string, string> STRINGS   = new Dictionary<string, string>() 
+                {};
+            Dictionary<string, string> FUNCTIONS = new Dictionary<string, string>() 
+                {};
+            Dictionary<string, bool>   CONTEXT   = new Dictionary<string, bool>()
+                { {"string", false}, {"func_name", false} };
             
             string LAST_STRING = "";
+            string LAST_FUNC   = "";
+            string LAST_LETTER = "";
 
             // Loop over each line in the contents list
             foreach (var lines in interpreterFile.contents)
@@ -105,7 +109,7 @@ namespace PieCodeV2.Interpreter
                 // Set things to ignore while running the program.
                 if (
                     string.IsNullOrWhiteSpace(lines)      ||
-                    string.IsNullOrWhiteSpace(lines)      ||
+                    string.IsNullOrEmpty(lines)           ||
                     lines.StartsWith(";")                 ||
                     (line == 0 && lines.StartsWith("#!"))
                 )  // Add one to the line int variable(for lines) and then go to the next loop
@@ -119,42 +123,121 @@ namespace PieCodeV2.Interpreter
                     // {
                     //     if (CONTEXT["string"]) { STRINGS[LAST_STRING] += letter; }
                     // }
-
+                    
                     if (letter == "\"")
                     {
-                        // TODO: Add support for \" and '
-                        string str_line   = line + "-" + char_num;
-                        
-                        // If we aren't in a string, create a new PieCode string in the dictionary,
-                        // and set the last string var to the proper var. If we are, then unset the 
-                        // last string var.
-                        if (!CONTEXT["string"])
+                        if (LAST_LETTER == "\\")
                         {
-                            STRINGS[str_line] = "";
-                            LAST_STRING       = str_line;
+                            if (CONTEXT["string"])
+                            { STRINGS[LAST_STRING] += letter; }
+                            // TODO: Maybe raise a syntax error or something? Future development 
                         }
                         else
-                        { LAST_STRING = ""; }
+                        {
+                            string str_line;
+                            if (string.IsNullOrEmpty(LAST_STRING))
+                            {
+                                str_line = line + "-" + char_num;
+                            }
+                            else
+                            {
+                                if (LAST_STRING.Split("-")[0] == line.ToString())
+                                {
+                                    str_line = LAST_STRING;
+                                }
+                                else
+                                {
+                                    str_line = line + "-" + char_num;
+                                }
+                            }
+                            // TODO: Add support for '
+
+                            // If we aren't in a string, create a new PieCode string in the dictionary,
+                            // and set the last string var to the proper var. If we are, then unset the 
+                            // last string var.
+                            if (CONTEXT["string"] == false)
+                            {
+                                STRINGS[str_line] = "";
+                                LAST_STRING       = str_line;
+                            }
+                            else
+                            { LAST_STRING = ""; }
                         
-                        // And then flip the string var to tell the interpreter if we're in a 
-                        // string or not. 
-                        CONTEXT["string"] = !CONTEXT["string"];
+                            // And then flip the string var to tell the interpreter if we're in a 
+                            // string or not. 
+                            CONTEXT["string"] = !CONTEXT["string"];
+                        }
                     }
                     else if (CONTEXT["string"])
-                    {
-                        STRINGS[LAST_STRING] += letter; 
-                    }
+                    { STRINGS[LAST_STRING] += letter; }
+                    
                     // Pass if it's blank
-                    else if (string.IsNullOrWhiteSpace(letter) || string.IsNullOrEmpty(letter)) { }
+                    else if (string.IsNullOrWhiteSpace(letter) || string.IsNullOrEmpty(letter))
+                    {
+                        if (CONTEXT["func_name"])
+                        {
+                            try
+                            {
+                                List<object> parameters  =  new List<object>();
+                                
+                                // TODO: Process the parameters of the func 
+                                MethodInfo command = typeof(Commands.Commands).GetMethod(FUNCTIONS[LAST_FUNC]);
+                                
+                                object[] new_para = parameters.ToArray();
+                                command.Invoke(null, new_para);
+                                LAST_FUNC = "";
+                            }
+                            catch (NullReferenceException)
+                            {
+                                throw new SyntaxError();
+                            }
+
+                            CONTEXT["func_name"] = false;
+                        }
+                    }
+                    
+                    else if (letter == ";")
+                    {
+                        foreach (var context in CONTEXT)
+                        {
+                            // TODO: Make this more exact and not actually resetting all contexts
+                            CONTEXT[context.Key] = false; 
+                        }
+                        break;
+                    }
+                    
+                    else if (CONTEXT["func_name"])
+                    {
+                        string func_line;
+                        if (string.IsNullOrEmpty(LAST_STRING))
+                        {
+                            func_line = line + "-" + char_num;
+                        }
+                        else
+                        {
+                            if (LAST_FUNC.Split("-")[0] == line.ToString())
+                            {
+                                func_line = LAST_STRING;
+                            }
+                            else
+                            {
+                                func_line = line + "-" + char_num;
+                            }
+                        }
+
+                        LAST_FUNC = func_line;
+                        FUNCTIONS[func_line] += letter;
+                    }
                     
                     // TODO: Add the letter to a current operation var and then when we get to a blank space attempt to process that current operation. 
                     // or when we get to a < start function calling until we get to a >
                     else
                     {
                         Console.WriteLine("You are trying to do more than a string initialization!" + 
-                                          "Yell at Pie to finish this!");
+                                          " Yell at Pie to finish this!");
                     }
 
+                    LAST_LETTER = letter;
                     char_num++;
                 }
                 
