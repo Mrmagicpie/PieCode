@@ -16,9 +16,9 @@
 
 
 using System;
-using System.Collections.Generic;
 using System.IO;    
 using PieCodeV2.Errors;
+using System.Collections.Generic;
 
 
 namespace PieCodeV2.Interpreter
@@ -33,7 +33,9 @@ namespace PieCodeV2.Interpreter
         /// </summary>
         private static Dictionary<string, string> ALIASES = new Dictionary<string, string>()
         {
-            {"ded", "exit"}
+            {"ded", "exit"},
+            {"l", "ls"},
+            {"bye", "exit"}
         };
 
         /// <summary>

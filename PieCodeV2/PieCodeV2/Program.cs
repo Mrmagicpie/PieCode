@@ -38,8 +38,8 @@ namespace PieCodeV2
         /// <summary>
         /// Readonly variable similar to the home dir because you only have one user per shell.
         /// </summary>
-        public static readonly string USER = "Mrmagicpie";
-        // public static readonly string USER = Environment.UserName;
+        // public static readonly string USER = "Mrmagicpie";
+        public static readonly string USER = Environment.UserName;
 
         /// <summary>
         /// Current directory.
